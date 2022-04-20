@@ -18,6 +18,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 import android.view.View;
 import android.widget.Button;
@@ -68,20 +69,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
         init();
     }
-
+  
     /**
-     * method to execute the activity when entries it has focus or not**/
+     * Method that allows to run the app in full screen  using Inmersive mode.
+     * A touch gesture will display the notification bar and system buttons, which
+     * are hidden to allow the app to be shown in full screen.
+     * @param hasFocus indicates if the screen is being focus.
+     */
     @Override
-    public void onWindowFocusChanged(boolean hasFocus){
+    public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
+        if (hasFocus){
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                            View.SYSTEM_UI_FLAG_FULLSCREEN |
+                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
                             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            View.SYSTEM_UI_FLAG_FULLSCREEN
             );
         }
     }
@@ -153,5 +158,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
-
 }
