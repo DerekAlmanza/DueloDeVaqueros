@@ -14,10 +14,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Método que permite ejecutar a la app en pantalla completa usando el modo Inmersivo.
-     * Con un gesto táctil se mostrará la barra de notificaciones y los botones del sistema
-     * al usuario, los cuales se ocultan para permitir mostrar la aplicación en pantalla completa.
-     * @param hasFocus indica si la pantalla está siendo enfocada.
+     * Method that allows to run the app in full screen  using Inmersive mode.
+     * A touch gesture will display the notification bar and system buttons, which
+     * are hidden to allow the app to be shown in full screen.
+     * @param hasFocus indicates if the screen is being focus.
      */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
