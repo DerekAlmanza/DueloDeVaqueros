@@ -2,7 +2,6 @@ package com.example.duelodevaqueros;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import androidx.core.app.JobIntentService;
 import androidx.core.content.ContextCompat;
 
@@ -10,7 +9,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-
 import android.content.pm.PackageManager;
 
 import android.hardware.Sensor;
@@ -123,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         checkStepSensor();
     }
 
-    
-
     private void checkStepSensor() {
         if (sensorManager == null) {
             startTimer();
@@ -138,6 +134,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     * to restart the duel.
     * */
     public void fire(View gun) {
+        JobIntentService.enqueueWork(this, SoundPlayer .class,
+            SoundPlayer.JOB_ID, new Intent(SoundPlayer.ACTION_FIRE));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() { init(); }
