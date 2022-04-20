@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus){
+            setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
@@ -112,11 +114,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED;
     }
-  
 
     /**
      * method linked to the principal view, recieves an object of type view and we make the button invisible when it's touched**/
     public void finalCountdown(View startButton){
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         startButton.setUiVisibility(View.INVISIBLE);
         checkStepSensor();
     }
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void fire(View gun) {
         JobIntentService.enqueueWork(this, SoundPlayer .class,
             SoundPlayer.JOB_ID, new Intent(SoundPlayer.ACTION_FIRE));
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() { init(); }
