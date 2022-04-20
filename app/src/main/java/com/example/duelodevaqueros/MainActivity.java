@@ -2,10 +2,12 @@ package com.example.duelodevaqueros;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.JobIntentService;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -99,5 +101,10 @@ public class MainActivity extends AppCompatActivity {
     public void finalCountdown(View startButton){
         startButton.setUiVisibility(View.INVISIBLE);
         checkStepSensor();
+    }
+
+    public void fire(View gun){
+        JobIntentService.enqueueWork(this, SoundPlayer .class,
+                SoundPlayer.JOB_ID, new Intent(SoundPlayer.ACTION_FIRE));
     }
 }
