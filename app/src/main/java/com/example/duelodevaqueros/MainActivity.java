@@ -11,4 +11,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+    // Run before the app start.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        init();
+    }
 }
