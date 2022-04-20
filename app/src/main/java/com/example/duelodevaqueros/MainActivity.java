@@ -2,10 +2,15 @@ package com.example.duelodevaqueros;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import androidx.core.app.JobIntentService;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,16 +18,24 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.os.Handler;
+import android.view.WindowManager;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
+
     private ImageView gunView;
-    private Button start_button;
+    private Button startButton;
     private SensorManager sensorManager;
     private Sensor stepDetectorSensor;
     private byte step;
+    private ExecutorService singleThreadProducer;
+    private DrawTimer asyncCounter;
     public static final byte SECONDS_TO_COUNT = 3;
 
     @Override
@@ -74,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * method to initialize the aplication and presents the start button**/
+     * Method to initialize the aplication and presents the start button
+     * Auxiliar method. Start the duel.
+     */
     private void init(){
         gunView.setVisibility(View.INVISIBLE);
         start_button .setVisibility(View.VISIBLE);
@@ -87,12 +102,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * method to check if we have permission to use the sensor**/
-    private boolean checkActivityRecognitionPermission(){
-        return ContextCompat.checkSelfPermission( this,
+    * Method to check if we have permission to use the sensor.
+    */
+    @TargetApi(29)
+    private boolean checkActivityRecognitionPermission() {
+        return ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED;
     }
-
+  
 
     /**
      * method linked to the principal view, recieves an object of type view and we make the button invisible when it's touched**/
@@ -100,4 +117,41 @@ public class MainActivity extends AppCompatActivity {
         startButton.setUiVisibility(View.INVISIBLE);
         checkStepSensor();
     }
+
+    
+
+    private void checkStepSensor() {
+        if (sensorManager == null) {
+            startTimer();
+            return;
+        }
+        sensorManager.registerListener(this, stepDetectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    // Called when the accuracy of the registered sensor has changed.
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        step++;
+        if(step >= 3){
+            sensorManager.unregisterListener(this);
+            gunView.setVisibility(View.VISIBLE);
+            step = 0;
+        }
+    }
+
+    // Run an async counter.
+    private void startTimer() {
+        if(singleThreadProducer == null) {
+            singleThreadProducer = Executors.newSingleThreadExecutor();
+        }
+        asyncCounter = new DrawTimer(gunView, SECONDS_TO_COUNT);
+        singleThreadProducer.execute(asyncCounter);
+    }
+
+    // Called when there is a new sensor event.
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
 }
