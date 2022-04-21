@@ -9,6 +9,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 
 import android.hardware.Sensor;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         gunView = findViewById(R.id.gun_iv);
-        start_button = findViewById(R.id.start_button);/**initialize the view with the botton start**/
+        startButton = findViewById(R.id.start_button);/**initialize the view with the botton start**/
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if(sensorManager != null) {
             stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     private void init(){
         gunView.setVisibility(View.INVISIBLE);
-        start_button .setVisibility(View.VISIBLE);
+        startButton .setVisibility(View.VISIBLE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
             if(!checkActivityRecognitionPermission()){
                 ActivityCompat.requestPermissions(this,
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * method linked to the principal view, recieves an object of type view and we make the button invisible when it's touched**/
     public void finalCountdown(View startButton){
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        startButton.setUiVisibility(View.INVISIBLE);
+        startButton.setVisibility(View.INVISIBLE);
         checkStepSensor();
     }
 
