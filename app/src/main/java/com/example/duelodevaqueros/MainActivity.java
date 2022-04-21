@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     * to restart the duel.
     * */
     public void fire(View gun) {
-        JobIntentService.enqueueWork(this, SoundPlayer .class,
+        JobIntentService.enqueueWork(this, SoundPlayer.class,
             SoundPlayer.JOB_ID, new Intent(SoundPlayer.ACTION_FIRE));
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         new Handler().postDelayed(new Runnable() {
